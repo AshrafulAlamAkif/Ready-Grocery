@@ -1,0 +1,6 @@
+name,desc,description,unit,buy_price,price,discount_price,quantity,min_order,image_id,
+Test Product 1,Automatically added by script,This is the new Description 1,kg,100,150,10,50,1,4,
+Test Product 2,Added using Selenium automation,This is the new Description 2,pcs,200,260,15,30,2,5,
+Mango Premium,Fresh Mango Imported,This is the new Description 3,kg,300,380,20,60,1,7,
+,,,,,,,,,,
+"								",,,,,,,,,,

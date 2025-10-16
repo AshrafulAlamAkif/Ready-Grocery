@@ -7,6 +7,17 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 
+
+# import pandas as pd
+# # 🔗 Google Sheet CSV Link
+# csv_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQEQPLmKdFSH3NZzxvKYC28CzsDx0Zk5ox62LM9POcpRUS1bU46nwsXVHZMoe73gqB9pxutsoSI_y-C/pub?gid=1498794614&single=true&output=csv"
+# # 📥 Read products from Google Sheet CSV
+# df = pd.read_csv(csv_url)
+# # 🛒 Convert to list of dicts
+# products = df.to_dict(orient="records")
+
+
+
 # ---------- Setup ----------
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver.maximize_window()
