@@ -62,16 +62,16 @@ time.sleep(2)
 
 
 # ---------- STEP 3: Fill Product Form ----------
-driver.find_element(By.ID, "product_name").send_keys("Misti Kumra Fali (Sweet Pumpkin Slice) ± 40 gm")
+driver.find_element(By.ID, "product_name").send_keys("Deshi Peyaj (Local Onion) ± 50 gm")
 driver.find_element(By.NAME, "short_description").send_keys("This product was added using automation test.")
 print("✍️ Filled basic info")
 
-# Click "Generate AI" button (wait 65 sec)
+# Click "Generate AI" button (wait 60 sec)
 try:
     generate_ai_btn = driver.find_element(By.ID, "generateAi")
     generate_ai_btn.click()
     print("⚙️ Clicked Generate AI button")
-    time.sleep(65)
+    time.sleep(60)
 except:
     print("⚠️ Generate AI button not found, skipping...")
 
@@ -86,24 +86,49 @@ driver.execute_script("arguments[0].click();", Generate_Code)
 print("✅ Product SKU generated successfully")
 
 
+# ---------- STEP 4: Pricing & Quantity ----------
+# # Buying price, Selling price, Discount, Stock, etc.
+# driver.find_element(By.ID, "buy_price").send_keys("100")
+# driver.find_element(By.ID, "price").send_keys("150")
+# driver.find_element(By.ID, "discount_price").send_keys("140")
+# driver.find_element(By.ID, "quantity").send_keys("20")
+# driver.find_element(By.ID, "min_order_quantity").send_keys("1")
 
-# Buying price, Selling price, Discount, Stock, etc.
-driver.find_element(By.ID, "buy_price").send_keys("100")
-driver.find_element(By.ID, "price").send_keys("150")
-driver.find_element(By.ID, "discount_price").send_keys("140")
-driver.find_element(By.ID, "quantity").send_keys("20")
-driver.find_element(By.ID, "min_order_quantity").send_keys("1")
+# print("💰 Filled pricing and quantity details")
 
-print("💰 Filled pricing and quantity details")
+                    # ---------- OR ----------
 
-# ---------- STEP 4: Select Category ----------
-category_checkbox = driver.find_element(By.ID, "category_2")  # Example: Fruits
+# ---------- STEP 4: Pricing & Quantity ----------
+# Clear then fill Buying price, Selling price, Discount, Stock, Min Order
+buy_price_field = driver.find_element(By.ID, "buy_price")
+price_field = driver.find_element(By.ID, "price")
+discount_field = driver.find_element(By.ID, "discount_price")
+stock_field = driver.find_element(By.ID, "quantity")
+min_order_field = driver.find_element(By.ID, "min_order_quantity")
+
+# Clear all first
+for field in [buy_price_field, price_field, discount_field, stock_field, min_order_field]:
+    field.clear()
+    time.sleep(0.2)
+
+# Now fill with data
+buy_price_field.send_keys("100")
+price_field.send_keys("150")
+discount_field.send_keys("140")
+stock_field.send_keys("20")
+min_order_field.send_keys("1")
+
+print("💰 Cleared and filled pricing and quantity details")
+
+
+# ---------- STEP 5: Select Category ----------
+category_checkbox = driver.find_element(By.ID, "category_1")  # Example: Fruits
 driver.execute_script("arguments[0].click();", category_checkbox)
 print("🍎 Selected category: Fruits")
 
 time.sleep(1)
 
-# ---------- STEP 5: Upload Thumbnail ----------
+# ---------- STEP 6: Upload Thumbnail ----------
 try:
     thumb_label = driver.find_element(By.CSS_SELECTOR, "label.mainThumbnail")
     driver.execute_script("arguments[0].click();", thumb_label)
@@ -115,7 +140,7 @@ try:
 
     # Select image (you can change data-id as needed)
     image_to_select = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.CSS_SELECTOR, "div.gridCart[data-id='5']"))
+        EC.element_to_be_clickable((By.CSS_SELECTOR, "div.gridCart[data-id='6']"))
     )
     image_to_select.click()
     print("📸 Selected an image")
@@ -133,7 +158,7 @@ try:
 except Exception as e:
     print("⚠️ Thumbnail upload skipped:", e)
 
-# ---------- STEP 6: Submit the Product ----------
+# ---------- STEP 7: Submit the Product ----------
 
 submit_btn = driver.find_element(By.XPATH, "//button[contains(.,'Submit') or contains(.,'Save')]")
 driver.execute_script("arguments[0].scrollIntoView(true);", submit_btn)
@@ -142,7 +167,7 @@ driver.execute_script("arguments[0].click();", submit_btn)
 print("📤 Submitted the product")
 
 
-# ---------- STEP 7: Wait & Verify ----------
+# ---------- STEP 8: Wait & Verify ----------
 time.sleep(5)
 if "products" in driver.current_url:
     print("🎉 Product added successfully!")
