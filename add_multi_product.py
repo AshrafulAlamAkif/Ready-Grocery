@@ -57,7 +57,7 @@ products = [
         "discount_price": "15",
         "quantity": "30",
         "min_order": "2",
-        "image_id": "2"
+        "image_id": "3"
     }
 ]
 
