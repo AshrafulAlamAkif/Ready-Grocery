@@ -155,7 +155,8 @@ def add_product(product):
             print("✅ Product SKU generated successfully")
         except:
             print("⚠️ Could not generate SKU")
-
+            
+        '''
         # ---------- Prices ----------
         driver.find_element(By.ID, "buy_price").send_keys(product["buy_price"])
         driver.find_element(By.ID, "price").send_keys(product["price"])
@@ -163,6 +164,40 @@ def add_product(product):
         driver.find_element(By.ID, "quantity").send_keys(product["quantity"])
         driver.find_element(By.ID, "min_order_quantity").send_keys(product["min_order"])
         print("💰 Filled pricing and quantity details")
+        '''
+
+        # ---------- OR ----------
+        # ---------- Prices ----------
+        # Clear all input fields first then fill
+        try:
+            # Clear & Fill buy price
+            buy_price_field = driver.find_element(By.ID, "buy_price")
+            buy_price_field.clear()
+            buy_price_field.send_keys(product["buy_price"])
+
+            # Clear & Fill selling price
+            price_field = driver.find_element(By.ID, "price")
+            price_field.clear()
+            price_field.send_keys(product["price"])
+
+            # Clear & Fill discount price
+            discount_field = driver.find_element(By.ID, "discount_price")
+            discount_field.clear()
+            discount_field.send_keys(product["discount_price"])
+
+            # Clear & Fill quantity
+            quantity_field = driver.find_element(By.ID, "quantity")
+            quantity_field.clear()
+            quantity_field.send_keys(product["quantity"])
+
+            # Clear & Fill minimum order quantity
+            min_order_field = driver.find_element(By.ID, "min_order_quantity")
+            min_order_field.clear()
+            min_order_field.send_keys(product["min_order"])
+
+            print("💰 Cleared and filled pricing & quantity details successfully!")
+        except Exception as e:
+            print("⚠️ Failed to fill price/quantity fields:", e)
 
         # ---------- Category ----------
         try:
