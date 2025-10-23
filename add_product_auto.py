@@ -62,18 +62,44 @@ time.sleep(1)
 
 
 # ---------- STEP 3: Fill Product Form ----------
-driver.find_element(By.ID, "product_name").send_keys("Deshi Peyaj (Local Onion) ± 50 gm")
+driver.find_element(By.ID, "product_name").send_keys("Deshi Peyaj (Local Onion) ± 50 gm. Real & Orginal Onion's)")
 driver.find_element(By.NAME, "short_description").send_keys("This product was added using automation test.")
 print("✍️ Filled basic info")
 
-# Click "Generate AI" button (wait 70 sec)
+'''
+# TODO if description create without Manual
+# Click "Generate AI" button (wait 67 sec)
 try:
     generate_ai_btn = driver.find_element(By.ID, "generateAi")
     generate_ai_btn.click()
     print("⚙️ Clicked Generate AI button")
-    time.sleep(70)
+    time.sleep(67)
 except:
     print("⚠️ Generate AI button not found, skipping...")
+    '''
+    
+# TODO if description create without Generate AI
+# ---------- Description (Quill Editor using XPath) ----------
+try:
+    # Wait until editor loads
+    editor = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//div[@id='editor']//div[contains(@class,'ql-editor')]"))
+    )
+
+    # Create dynamic description text
+    description_text = f"<p><b>['product_name']</b> - ['short_description']</p><p>This product is available now. Order today!</p>"
+
+    # Insert HTML into editor
+    driver.execute_script("arguments[0].innerHTML = arguments[1];", editor, description_text)
+
+    # Update hidden input so backend gets it
+    hidden_input = driver.find_element(By.XPATH, "//input[@id='description']")
+    driver.execute_script("arguments[0].value = arguments[1];", hidden_input, description_text)
+
+    print("📝 Description field filled successfully!")
+except Exception as e:
+    print("⚠️ Description fill failed:", e)
+
 
 # Fill Unit
 driver.find_element(By.ID, "unit").send_keys("kg")
@@ -126,7 +152,7 @@ category_checkbox = driver.find_element(By.ID, "category_2")  # Example: Fruits
 driver.execute_script("arguments[0].click();", category_checkbox)
 print("🍎 Selected category: Fruits")
 
-time.sleep(1)
+time.sleep(0.2)
 
 # ---------- STEP 5: Upload Thumbnail ----------
 try:
@@ -134,7 +160,7 @@ try:
     driver.execute_script("arguments[0].click();", thumb_label)
     print("🖼️ Opened image upload modal")
 
-    time.sleep(3)
+    time.sleep(2)
     driver.switch_to.frame("lfmIframe")
     print("🔄 Switched to image frame")
 
@@ -168,7 +194,7 @@ print("📤 Submitted the product")
 
 
 # ---------- STEP 7: Wait & Verify ----------
-time.sleep(3)
+time.sleep(1)
 if "products" in driver.current_url:
     print("🎉 Product added successfully!")
 else:

@@ -105,7 +105,10 @@ def add_product(product):
         driver.find_element(By.ID, "product_name").send_keys(product["name"])
         driver.find_element(By.NAME, "short_description").send_keys(product["desc"])
         print(f"✍️ Filling info for {product['name']}")
-
+        
+        
+        '''
+        # TODO if description create without Manual
         # ---------- Generate AI Description (optional) ----------
         try:
             generate_ai_btn = driver.find_element(By.ID, "generateAi")
@@ -114,7 +117,30 @@ def add_product(product):
             time.sleep(65)
         except:
             print("⚠️ Generate AI button not found, skipping...")
+'''
+        # TODO if description create without Generate AI
+        # ---------- Description (Quill Editor using XPath) ----------
+        try:
+            # Wait until editor loads
+            editor = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, "//div[@id='editor']//div[contains(@class,'ql-editor')]"))
+            )
 
+            # Create dynamic description text
+            description_text = f"<p><b>{product['name']}</b> - {product['desc']}</p><p>This product is available now. Order today!</p>"
+
+            # Insert HTML into editor
+            driver.execute_script("arguments[0].innerHTML = arguments[1];", editor, description_text)
+
+            # Update hidden input so backend gets it
+            hidden_input = driver.find_element(By.XPATH, "//input[@id='description']")
+            driver.execute_script("arguments[0].value = arguments[1];", hidden_input, description_text)
+
+            print("📝 Description field filled successfully!")
+        except Exception as e:
+            print("⚠️ Description fill failed:", e)
+        
+        
         # ---------- Unit ----------
         driver.find_element(By.ID, "unit").send_keys(product["unit"])
 
@@ -157,7 +183,8 @@ def add_product(product):
             print("🔄 Switched to image frame")
 
             image_to_select = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, f"div.gridCart[data-id='{product.get('image_id', '2')}']"))
+                # EC.element_to_be_clickable((By.CSS_SELECTOR, f"div.gridCart[data-id='{product.get('image_id', '2')}']"))
+                EC.element_to_be_clickable((By.CSS_SELECTOR, f"div.gridCart[data-id='{product.get('image_id')}']"))
             )
             image_to_select.click()
             print("📸 Selected an image")
