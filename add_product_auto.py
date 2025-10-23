@@ -62,7 +62,7 @@ time.sleep(1)
 
 
 # ---------- STEP 3: Fill Product Form ----------
-driver.find_element(By.ID, "product_name").send_keys("Deshi Peyaj (Local Onion) ± 50 gm. Real & Orginal Onion's)")
+driver.find_element(By.ID, "product_name").send_keys("Test product 1")
 driver.find_element(By.NAME, "short_description").send_keys("This product was added using automation test.")
 print("✍️ Filled basic info")
 
@@ -133,28 +133,28 @@ discount_field = driver.find_element(By.ID, "discount_price")
 stock_field = driver.find_element(By.ID, "quantity")
 min_order_field = driver.find_element(By.ID, "min_order_quantity")
 
-# Clear all first
+# Clear all input fields first
 for field in [buy_price_field, price_field, discount_field, stock_field, min_order_field]:
     field.clear()
     time.sleep(0.2)
 
 # Now fill with data
-buy_price_field.send_keys("100")
-price_field.send_keys("150")
-discount_field.send_keys("140")
-stock_field.send_keys("20")
+buy_price_field.send_keys("20")
+price_field.send_keys("50")
+discount_field.send_keys("40")
+stock_field.send_keys("30")
 min_order_field.send_keys("1")
 
 print("💰 Cleared and filled pricing and quantity details")
 
-# ---------- STEP 4: Select Category ----------
+# ---------- STEP 5: Select Category ----------
 category_checkbox = driver.find_element(By.ID, "category_2")  # Example: Fruits
 driver.execute_script("arguments[0].click();", category_checkbox)
 print("🍎 Selected category: Fruits")
 
 time.sleep(0.2)
 
-# ---------- STEP 5: Upload Thumbnail ----------
+# ---------- STEP 6: Upload Thumbnail ----------
 try:
     thumb_label = driver.find_element(By.CSS_SELECTOR, "label.mainThumbnail")
     driver.execute_script("arguments[0].click();", thumb_label)
@@ -184,7 +184,7 @@ try:
 except Exception as e:
     print("⚠️ Thumbnail upload skipped:", e)
 
-# ---------- STEP 6: Submit the Product ----------
+# ---------- STEP 7: Submit the Product ----------
 
 submit_btn = driver.find_element(By.XPATH, "//button[contains(.,'Submit') or contains(.,'Save')]")
 driver.execute_script("arguments[0].scrollIntoView(true);", submit_btn)
@@ -193,7 +193,7 @@ driver.execute_script("arguments[0].click();", submit_btn)
 print("📤 Submitted the product")
 
 
-# ---------- STEP 7: Wait & Verify ----------
+# ---------- STEP 8: Wait & Verify ----------
 time.sleep(1)
 if "products" in driver.current_url:
     print("🎉 Product added successfully!")
