@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 import time
-
+import random
 
 # import pandas as pd
 # # 🔗 Google Sheet CSV Link
@@ -22,7 +22,7 @@ import time
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver.maximize_window()
 driver.get("https://uat-readygrocery.razinsoft.com/admin/login")
-time.sleep(2)
+time.sleep(1)
 
 # ---------- STEP 1: Login ----------
 driver.find_element(By.ID, "email").send_keys("root@grocery.com")
@@ -38,12 +38,12 @@ print("✅ Logged in successfully")
 # ---------- STEP 2: Product List ----------
 products = [
     {
-        "name": "Test Product 1",
+        "name": "Olitalia Olio Extra Virgin Di Oliva Oil 5LTR",
         "desc": "This product was added automatically.",
-        "unit": "kg",
-        "buy_price": "100",
-        "price": "150",
-        "discount_price": "10",
+        "unit": "pieces",
+        "buy_price": "15000",
+        "price": "22000",
+        "discount_price": "16728",
         "quantity": "50",
         "min_order": "1",
         "image_id": "7"
@@ -68,7 +68,7 @@ def open_product_menu_once():
         if submenu_visible:
             print("📂 Product Management menu already expanded")
             return
-        product_menu = WebDriverWait(driver, 10).until(
+        product_menu = WebDriverWait(driver, 5).until(
             EC.element_to_be_clickable((By.XPATH, "//span[normalize-space()='Product Management']"))
         )
         driver.execute_script("arguments[0].scrollIntoView(true);", product_menu)
@@ -84,7 +84,7 @@ def add_product(product):
     try:
         # ---------- STEP 3: Go to Add Product ----------
         try:
-            add_product_btn = WebDriverWait(driver, 10).until(
+            add_product_btn = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located((By.XPATH, "//div[@id='productMenu']//a[contains(@href, '/shop/product/create')]"))
             )
             driver.execute_script("arguments[0].scrollIntoView(true);", add_product_btn)
@@ -92,14 +92,14 @@ def add_product(product):
             print("🧾 Opened Add Product page successfully! (via href)")
         except:
             print("⚠️ First try failed, trying fallback locator...")
-            add_product_btn = WebDriverWait(driver, 10).until(
+            add_product_btn = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located((By.XPATH, "//div[@id='productMenu']//a[contains(., 'Add Product')]"))
             )
             driver.execute_script("arguments[0].scrollIntoView(true);", add_product_btn)
             driver.execute_script("arguments[0].click();", add_product_btn)
             print("🧾 Opened Add Product page successfully! (via text)")
 
-        time.sleep(2)
+        time.sleep(1)
 
         # ---------- STEP 4: Fill Product Form ----------
         driver.find_element(By.ID, "product_name").send_keys(product["name"])
@@ -213,18 +213,30 @@ def add_product(product):
             driver.execute_script("arguments[0].click();", thumb_label)
             print("🖼️ Opened image upload modal")
 
-            time.sleep(3)
+            time.sleep(2)
             driver.switch_to.frame("lfmIframe")
             print("🔄 Switched to image frame")
-
+            
+            # ---------- Select an Image ----------
             image_to_select = WebDriverWait(driver, 10).until(
                 # EC.element_to_be_clickable((By.CSS_SELECTOR, f"div.gridCart[data-id='{product.get('image_id', '2')}']"))
                 EC.element_to_be_clickable((By.CSS_SELECTOR, f"div.gridCart[data-id='{product.get('image_id')}']"))
             )
             image_to_select.click()
             print("📸 Selected an image")
+            
+            '''                        # or
+            # ---------- Select a Random Image ----------
+            # Randomly pick image ID between 1–10
+            random_image_id = random.randint(2, 14)
 
-            time.sleep(2)
+            image_to_select = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, f"//div[@class='gridCart' and @data-id='{random_image_id}']"))
+            )
+            image_to_select.click()
+            print(f"📸 Selected random image ID: {random_image_id}")'''
+
+            time.sleep(1)
             confirm_button = driver.find_element(By.XPATH, "//nav[@id='actions']//a[@data-action='use']")
             confirm_button.click()
             print("✅ Clicked Confirm button successfully")
